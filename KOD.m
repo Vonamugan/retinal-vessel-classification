@@ -41,13 +41,13 @@ kriz2 = [0  0  0  1  0  0  0 ;
 
 
 
-M = zeros(size(crop_skel));
+M = zeros(size(skel));
 
 prah = 6.2;
-for i = 1:size(crop_skel, 1)-6      % ve for cyklu prochazime cely obrazek, vystrihneme ctverec 7x7 a provedeme konvoluci s krizem a krizem2
+for i = 1:size(skel, 1)-6      % ve for cyklu prochazime cely obrazek, vystrihneme ctverec 7x7 a provedeme konvoluci s krizem a krizem2
                                     % za predpokladem ze v miste uzlu soucet konvolucnich obrazku bude > nez vybrany prah  
-    for j = 1:size(crop_skel, 2)-6  
-        obr_7x7 =  crop_skel(i:i+6,j:j+6);
+    for j = 1:size(skel, 2)-6  
+        obr_7x7 =  skel(i:i+6,j:j+6);
         konv = conv2(kriz, obr_7x7, "same");
         konv2 = conv2(kriz2, obr_7x7, "same");
         if sum(sum(konv))>prah || sum(sum(konv2))>prah
@@ -63,7 +63,7 @@ M(skel==0)=0;
 
 % pro ukazku. uzly tady stale nejsou bodem na ceve, ale oblasti. nekdy
 % oblasti splyvaji 
-C = imfuse(M,crop_skel); 
+C = imfuse(M,skel); 
 imshow(C);
 
 % vylepsit... do jednoho bodu???
