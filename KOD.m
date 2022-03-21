@@ -1,10 +1,10 @@
 clear all
 clc
 %% nacitani obr
-obr_rgb = imread("01_dr.JPG");
-obr = im2double(imread("01_dr.JPG"));
-obr_mask = im2double(imread("01_dr_mask.tif"));
-obr_bin = imread("01_dr.tif");
+obr_rgb = imread("15_dr.JPG");
+obr = im2double(imread("15_dr.JPG"));
+obr_mask = im2double(imread("15_dr_mask.tif"));
+obr_bin = imread("15_dr.tif");
 %% skeletonizace
 obr_bin = logical( obr_bin );
 skel = bwskel(obr_bin);
@@ -57,18 +57,19 @@ for i = 1:size(skel, 1)-6      % ve for cyklu prochazime cely obrazek, vystrihne
         end
     end
 end
-% imshow(M);
 
-% v M uzly jsou i na mistech, kde neni ceva, zbavime se techto hodnot:
-M(skel==0)=0;
+%% M do jednoho bodu
+figure(1)
+M = logical(M) ;
+stredy_uzlu = regionprops(M,'centroid');
+centroids = cat(1,stredy_uzlu.Centroid);
+imshow(skel)
+hold on
+plot(centroids(:,1),centroids(:,2),'rx','MarkerSize',15,'LineWidth',2)
+hold off
 
-% pro ukazku. uzly tady stale nejsou bodem na ceve, ale oblasti. nekdy
-% oblasti splyvaji 
-C = imfuse(M,skel); 
-imshow(C);
-
-% vylepsit... do jednoho bodu???
 %% histogramy ruznych slozek
+
 R = im2double(obr_rgb(:,:,1));
 G = im2double(obr_rgb(:,:,2));
 B = im2double(obr_rgb(:,:,3));
@@ -77,46 +78,49 @@ RB = im2double(R+B);
 GB = im2double(B+G);
 RGB = im2double(R+G+B);
 
-figure(1)
+figure(2)
 subplot(171)
 hodnoty_jen_cev = R(obr_bin);
-imhist(hodnoty_jen_cev);
+bar(imhist(hodnoty_jen_cev));
 title("R");
 
 subplot(172)
 hodnoty_jen_cev = G(obr_bin);
-imhist(hodnoty_jen_cev);
+bar(imhist(hodnoty_jen_cev));
 title("G");
 
 subplot(173)
 hodnoty_jen_cev = B(obr_bin) ;
-imhist(hodnoty_jen_cev);
+bar(imhist(hodnoty_jen_cev));
 title("B");
 
 
 subplot(174)
 hodnoty_jen_cev = RG(obr_bin);
-imhist(hodnoty_jen_cev);
+bar(imhist(hodnoty_jen_cev));
 title("R+G");
 
 subplot(175)
 hodnoty_jen_cev = GB(obr_bin);
-imhist(hodnoty_jen_cev);
+bar(imhist(hodnoty_jen_cev));
 title("G+B (↓↓↓BEST↓↓↓)");
 
 
 subplot(176)
 hodnoty_jen_cev = RB(obr_bin) ;
-imhist(hodnoty_jen_cev);
+bar(imhist(hodnoty_jen_cev));
 title("R+B");
 
 subplot(177)
 hodnoty_jen_cev = RGB(obr_bin) ;
-imhist(hodnoty_jen_cev);
+bar(imhist(hodnoty_jen_cev));
 title("RGB");
 
 %% klasifikace cev mezi uzly 
 % ...
+% 1.rozdelit histogram na 2 casti
+
+% 2. vymyslet indexovani casti cev na zaklade stredy_uzlu
 
 %% poskladat nejak rozumne klasifikace aby to davalo smysl
 % ...
