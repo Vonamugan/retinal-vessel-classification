@@ -102,7 +102,7 @@ disp(["accuracy of random forest pixel classification before median = " + 100*(s
 
 %% predtim jsme ucili a trenovali trees na jednotlive pixely, ted chci videt vysledek jako obrazek na naucene drive siti. bereme 15_h(neucil se na tom ani netestoval):
 
-[med_pomer_b_g, kv_odch_pomer_b_g, mean_pomer_b_g, pomer1, obsh, vysl,skel] = fce( listing_Evy(end).name, listing_images(end).name, listing_bin(end).name);
+[med_pomer_b_g, kv_odch_pomer_b_g, mean_pomer_b_g, pomer1, obsh, vysl,skel] = fce( fullfile(listing_Evy(1).folder,(listing_Evy(end).name)), fullfile(listing_images(1).folder,(listing_images(end).name)), fullfile(listing_bin(1).folder,(listing_bin(end).name)));
 sz = length(med_pomer_b_g(:));
 T_posledni = table('Size',[0 4],'VariableTypes',{'double','double','double', 'double'},'VariableNames',{'median','kvadr_odch','mean','pomer'});
 T_posledni.median(1:sz) = med_pomer_b_g(:);
